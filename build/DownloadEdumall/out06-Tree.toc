@@ -1,5 +1,0 @@
-('E:\\Language\\Python\\edumall\\Download-Edumall\\build\\DownloadEdumall\\idna-2.5-py2.7.egg',
- None,
- set(['*.py', '*.pyc', '*.pyd', '*.pyo', '*.so', 'EGG-INFO']),
- 'DATA',
- [])
