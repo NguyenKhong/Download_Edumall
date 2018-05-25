@@ -5,7 +5,7 @@ Download Edumall là ứng dụng đơn giản giúp tải các video trên [edu
 ![](img/Image_001.png)
 
 # Hướng dẫn sử dụng:
-## 1. Link tải: [Tải](https://raw.githubusercontent.com/NguyenKhong/Download-Edumall/master/Binary/DownloadEdumall.exe)
+## 1. Link tải: [Tải](https://github.com/NguyenKhong/Download_Edumall/raw/master/exe/DownloadEdumall.exe)
 ## 2. Các tính năng:
 * Tải video các khóa học hiện đang có trong tài khoản.
 * Tải các khóa giải mã các tệp tin video khi có vấn đề.
