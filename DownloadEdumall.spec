@@ -5,7 +5,7 @@ block_cipher = None
 added_files = [('.\\ffmpeg', 'ffmpeg'), ('.\\logo', 'logo')]
 
 a = Analysis(['DownloadEdumall.py'],
-             pathex=['E:\\Language\\Python\\edumall\\Download-Edumall'],
+             pathex=['E:\\Language\\Python\\edumall\\Download_Edumall'],
              binaries=[],
              datas=added_files,
              hiddenimports=[],

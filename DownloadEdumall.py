@@ -24,6 +24,7 @@ sys.setdefaultencoding('utf-8')
 os.environ['HTTPSVERIFY'] = '0'
 
 g_session = requests.Session()
+
 g_UserAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 g_CurrentDir = os.getcwd()
 g_Key = None
@@ -59,7 +60,7 @@ def Login(User, Pass):
 	Return values.: None
 	Author........: Zero-0
 	'''
-	url = 'https://edumall.vn/users/sign_in'
+	url = 'https://edumall.vn'
 	try:
 		r = g_session.get(url)
 		if r.status_code != 200:
@@ -76,9 +77,10 @@ def Login(User, Pass):
 
 	payload = { 'user[email]' : User,
 				'user[password]': Pass,
-				'authenticity_token' : authenticity_token[0]
+				'authenticity_token' : authenticity_token[1]
 		}
 	try:
+		url = 'https://edumall.vn/users/sign_in'
 		r = g_session.post(url, data = payload)
 		if r.status_code != 200:
 			logger.warning("Loi dang nhap")
