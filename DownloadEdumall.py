@@ -300,73 +300,79 @@ def GetPlaylist(url, IsDownloadKey = False, pathLocal = None):
 	return listUrlTs
 
 def GetKey(url, pathLocal = None):
-	'''
-	Name..........: GetKey
-	Description...: Download Key from server to client and save it
-	Parameters....: url - string. Url get from function GetPlaylist()
-	..............: pathLocal - [optional] path to directiory save key on client
-	Return values.: Success - Returns Binary key
-	..............: Failure - Returns list is None
-	Author........: Zero-0
-	'''
-	if not pathLocal: pathLocal = g_CurrentDir
-	fileName = 'key_%s.key' % datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d-%H-%M-%S')
-	try:
-		r = requests.get(url, headers = {'User-Agent' : g_UserAgent})
-		if r.status_code != 200:
-			logger.warning("Download Key Failed - Loi Server: {%s}.", r.status_code)
-			return ""
-	except Exception as e:
-		logger.warning("Download Key Failed - Loi: {%s} - url: %s.", e, url)
-		return ""
+    '''
+    Name..........: GetKey
+    Description...: Download Key from server to client and save it
+    Parameters....: url - string. Url get from function GetPlaylist()
+    ..............: pathLocal - [optional] path to directiory save key on client
+    Return values.: Success - Returns Binary key
+    ..............: Failure - Returns list is None
+    Author........: Zero-0
+    '''
+    if not pathLocal: pathLocal = g_CurrentDir
+    fileName = 'key_%s.key' % datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d-%H-%M-%S')
+    headers = { "User-Agent" : g_UserAgent, 
+                "Origin" : "https://edumall.vn"
+            }
+    try:
+        r = requests.get(url, headers = headers)
+        if r.status_code != 200:
+            logger.warning("Download Key Failed - Loi Server: {%s}.", r.status_code)
+            return ""
+    except Exception as e:
+        logger.warning("Download Key Failed - Loi: {%s} - url: %s.", e, url)
+        return ""
 
-	global g_Key
-	g_Key = None
-	if len(r.content)%16:
-		logger.warning("Download key Failed - Khoa khong du du lieu.")
-		g_Key = None
-		return ""
-	g_Key = r.content
-	with open(os.path.join(pathLocal, fileName), 'wb') as f:
-		for chunk in r.iter_content(1024):
-			f.write(chunk)
-	print (fileName)
-	return r.content
+    global g_Key
+    g_Key = None
+    if len(r.content)%16:
+        logger.warning("Download key Failed - Khoa khong du du lieu.")
+        g_Key = None
+        return ""
+    g_Key = r.content
+    with open(os.path.join(pathLocal, fileName), 'wb') as f:
+        #for chunk in r.iter_content(1024):
+        f.write(g_Key)
+    print (fileName)
+    return g_Key
 	
 def DownloadTs(url, pathLocal, IsDecrypt = True):
-	'''
-	Name..........: DownloadTs
-	Description...: Download file ts from server to client and save it
-	Parameters....: url - string. Url get from function GetPlaylist()
-	..............: pathLocal - string. Path to directiory save file ts on client
-	..............: IsDecrypt - [optional] If true function will decrypt file ts
-	Return values.: None
-	Author........: Zero-0
-	'''
-	try:
-		tmp = re.findall(r"[_|-](\d+\.ts)", urllib.unquote(url))
-		fileName = tmp[0]
-	except:
-		fileName = pathLeaf(urllib.unquote(url))
-	fileName = removeCharacters(fileName)
-	try:
-		r = requests.get(url, headers = {'User-Agent' : g_UserAgent}, stream = True)
-		if r.status_code != 200:
-			logger.warning("Loi: %s - url: %s", r.status_code, url)
-			return False
-		print fileName
-		with open(os.path.join(pathLocal, fileName), 'wb') as f:
-			if IsDecrypt and g_Key:
-				data = Decrypt(r.content, g_Key)
-				if data:
-					f.write(data)
-			else:
-				for chunk in r.iter_content(1048576):
-					f.write(chunk)
-	except Exception as e:
-		logger.warning("Loi: %s - url: %s", e, url)
-		return False
-	return True		
+    '''
+    Name..........: DownloadTs
+    Description...: Download file ts from server to client and save it
+    Parameters....: url - string. Url get from function GetPlaylist()
+    ..............: pathLocal - string. Path to directiory save file ts on client
+    ..............: IsDecrypt - [optional] If true function will decrypt file ts
+    Return values.: None
+    Author........: Zero-0
+    '''
+    try:
+        tmp = re.findall(r"[_|-](\d+\.ts)", urllib.unquote(url))
+        fileName = tmp[0]
+    except:
+        fileName = pathLeaf(urllib.unquote(url))
+    fileName = removeCharacters(fileName)
+    headers = { "User-Agent" : g_UserAgent, 
+                "Origin" : "https://edumall.vn"
+            }
+    try:
+        r = requests.get(url, headers = headers, stream = True)
+        if r.status_code != 200:
+            logger.warning("Loi: %s - url: %s", r.status_code, url)
+            return False
+        print fileName
+        with open(os.path.join(pathLocal, fileName), 'wb') as f:
+            if IsDecrypt and g_Key:
+                data = Decrypt(r.content, g_Key)
+                if data:
+                    f.write(data)
+            else:
+                for chunk in r.iter_content(1048576):
+                    f.write(chunk)
+    except Exception as e:
+        logger.warning("Loi: %s - url: %s", e, url)
+        return False
+    return True		
 
 def DownloadTss(urls, pathLocal, IsDecrypt = True):
 	for url in urls:
