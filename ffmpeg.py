@@ -36,6 +36,8 @@ def TsToMp4(Folder, OutPutFileName = ""):
 
 	DirComplete = os.path.join(Folder[0:Folder.rfind("\\")], 'complete')
 	if not os.path.exists(DirComplete): os.mkdir(DirComplete)
+	DirLog = os.path.join(DirComplete, 'log')
+	if not os.path.exists(DirLog): os.mkdir(DirLog)
 	concatFile = os.path.join(DirComplete, 'concat.txt')
 	with open(concatFile, 'w') as f:
 		for i in fullPathFiles:
@@ -44,10 +46,10 @@ def TsToMp4(Folder, OutPutFileName = ""):
 
 	if OutPutFileName:	
 		outputFile = os.path.join(DirComplete, OutPutFileName)
-		FileLog = os.path.join(DirComplete, OutPutFileName + ".log")
+		FileLog = os.path.join(DirLog, OutPutFileName + ".log")
 	else:
 		outputFile = os.path.join(DirComplete, 'output.mp4')
-		FileLog = os.path.join(DirComplete, 'output.log')
+		FileLog = os.path.join(DirLog, 'output.log')
 
 	args = [FFMPEG_PATH, '-f', 'concat', '-i', concatFile, '-c', 'copy', '-bsf:a', 'aac_adtstoasc', outputFile]
 

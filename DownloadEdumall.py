@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 stdout_logger = logging.StreamHandler()
 file_logger = logging.FileHandler("DownloadEdumall.log", mode = 'w')
-formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s: %(message)s')
+formatter = logging.Formatter('%(asctime)s %(funcName)s %(levelname)s: %(message)s')
 stdout_logger.setFormatter(formatter)
 file_logger.setFormatter(formatter)
 
